@@ -5373,13 +5373,28 @@ function Sport_UnlockTest() {
 }
 
 function showSupportOS() {
-    if [ "$LANGUAGE" == 'en' ]; then
-        echo -e "${Font_Purple}Supporting OS: Ubuntu 16+, Debian 10+, RHEL 7+, Arch Linux, Alpine Linux, FreeBSD, MacOS 10.13+, Android (Termux), iOS (iSH), Windows (MinGW/Cygwin), OpenWRT 23+ etc.${Font_Suffix}"
-        echo ''
-    else
-        echo -e "${Font_Purple}脚本适配 OS: Ubuntu 16+, Debian 10+, RHEL 7+, Arch Linux, Alpine Linux, FreeBSD, MacOS 10.13+, Android (Termux), iOS (iSH), Windows (MinGW/Cygwin), OpenWRT 23+ 等。${Font_Suffix}"
-        echo ''
-    fi
+  local SUPPORTED_OS=(
+    "Ubuntu 16+"
+    "Debian 10+"
+    "RHEL 7+"
+    "Arch Linux"
+    "Alpine Linux"
+    "FreeBSD"
+    "MacOS 10.13+"
+    "Android (Termux)"
+    "iOS (iSH)"
+    "Windows (MinGW/Cygwin)"
+    "OpenWRT 23+"
+  )
+  
+  if [[ "$LANGUAGE" == 'en' ]]; then
+    SUPPORTED_OS_PREFIX="Supported OS:"
+  else
+    SUPPORTED_OS_PREFIX="脚本适配 OS:"
+  fi
+
+  echo -e "${Font_Purple}${OS_PREFIX} ${SUPPORTED_OS[@]} ${Font_Suffix}"
+  echo ''
 }
 
 function showScriptTitle() {
