@@ -225,60 +225,51 @@ check_net_connctivity() {
 }
 
 check_os_type() {
-    OS_TYPE=''
-    local ifLinux=$(uname -a | grep -i 'linux')
-    local ifFreeBSD=$(uname -a | grep -i 'freebsd')
-    local ifTermux=$(echo "$PWD" | grep -i 'termux')
-    local ifMacOS=$(uname -a | grep -i 'Darwin')
-    local ifMinGW=$(uname -a | grep -i 'MINGW')
-    local ifCygwin=$(uname -a | grep -i 'CYGWIN')
-    local ifAndroid=$(uname -a | grep -i 'android')
-    local ifiSh=$(uname -a | grep -i '\-ish')
+  local OS_TYPE=""
 
-    if [ -n "$ifLinux" ] && [ -z "$ifAndroid" ] && [ -z "$ifiSh" ]; then
-        OS_TYPE='linux'
+  case "$(uname -a)" in
+    *Linux* | *linux* )
+      if [[ ! $(uname -a | grep -i 'android') ]] && [[ ! $(uname -a | grep -i '\-ish') ]]; then
+        OS_TYPE="linux"
         OS_LINUX=1
-        return
-    fi
-    if [ -n "$ifTermux" ]; then
-        OS_TYPE='termux'
-        OS_TERMUX=1
-        OS_ANDROID=1
-        return
-    fi
-    if [ -n "$ifMacOS" ]; then
-        OS_TYPE='macos'
-        OS_MACOS=1
-        return
-    fi
-    if [ -n "$ifMinGW" ]; then
-        OS_TYPE='msys'
-        OS_WINDOWS=1
-        return
-    fi
-    if [ -n "$ifCygwin" ]; then
-        OS_TYPE='cygwin'
-        OS_WINDOWS=1
-        return
-    fi
-    if [ -n "$ifFreeBSD" ]; then
-        OS_TYPE='freebsd'
-        OS_FREEBSD=1
-        return
-    fi
-    if [ -n "$ifAndroid" ]; then
-        OS_TYPE='android'
-        OS_ANDROID=1
-        return
-    fi
-    if [ -n "$ifiSh" ]; then
-        OS_TYPE='ish'
-        OS_IOS=1
-        return
-    fi
+      fi
+      ;;
+    *Darwin* | *darwin* )
+      OS_TYPE="macos"
+      OS_MACOS=1
+      ;;
+    *MINGW* | *mingw* )
+      OS_TYPE="msys"
+      OS_WINDOWS=1
+      ;;
+    *CYGWIN* | *cygwin* )
+      OS_TYPE="cygwin"
+      OS_WINDOWS=1
+      ;;
+    *FreeBSD* | *freebsd* )
+      OS_TYPE="freebsd"
+      OS_FREEBSD=1
+      ;;
+    *android* )
+      OS_TYPE="android"
+      OS_ANDROID=1
+      ;;
+    *\-ish* )
+      OS_TYPE="ish"
+      OS_IOS=1
+      ;;
+    *Termux* | *termux* )
+      OS_TYPE="termux"
+      OS_TERMUX=1
+      OS_ANDROID=1
+      ;;
+    * )
+      echo -e "${Font_Red}Unsupported OS Type.${Font_Suffix}"
+      exit 1
+      ;;
+  esac
 
-    echo -e "${Font_Red}Unsupported OS Type.${Font_Suffix}"
-    exit 1
+  return
 }
 
 check_dependencies() {
